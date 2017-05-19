@@ -57,6 +57,28 @@ moveLeft();
 
 ```
 
+#### 3.pizza尺寸缩放渲染时间太长的问题
+解决方案：   
+循环比较大的问题,能一遍提取或计算的，不要放在循环里重复操作。
+
+```
+// 遍历披萨的元素并改变它们的宽度
+function changePizzaSizes(size) {
+
+var _pizza = document.querySelectorAll(".randomPizzaContainer");
+
+// 这些值只要取一遍就行了
+var dx = determineDx(_pizza[0], size);
+var newwidth = (_pizza[0].offsetWidth + dx) + 'px';  
+
+for (var i = 0; i < _pizza.length; i++) {
+  _pizza[i].style.width = newwidth;       
+}
+
+}
+```
+
+
 
    
 ## 启动服务
