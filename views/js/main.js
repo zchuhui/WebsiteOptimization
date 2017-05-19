@@ -494,9 +494,11 @@ function logAverageFrame(times) {   // times参数是updatePositions()由User Ti
 // 下面的关于背景滑窗披萨的代码来自于Ilya的demo:
 // https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
 
+
 // 基于滚动条位置移动背景中的披萨滑窗
+// 使用 requestAnimationFrame 操作动画
+// 设置帧速为60fps
 function updatePositions() {
-  //requestAnimationFrame(updatePositions);
   frame++;  
   window.performance.mark("mark_start_frame");
 
@@ -511,10 +513,10 @@ function updatePositions() {
   var then = Date.now();
   var interval = 1000/fps;
   var delta;
-  var frameId;
+  var frameId;        
 
   function moveLeft(){
-    // 使用requestAnimationFrame绘制
+    
     frameId = requestAnimationFrame(moveLeft);
 
     now = Date.now();

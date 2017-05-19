@@ -1,57 +1,75 @@
-## 网站性能优化项目
+## 网站站点优化demo
+尽可能优化这个在线项目的速度与动画效果。
 
-你要做的是尽可能优化这个在线项目的速度。注意，请应用你之前在[网站性能优化课程](https://cn.udacity.com/course/website-performance-optimization--ud884/)中学习的技术来优化关键渲染路径并使这个页面尽可能快的渲染。
+## 优化手段
+使用 `Chrome devs`工具的`Performance`查看并分析站点的性能问题，辅助使用Chrome插件 `PageSpeed`查看 `PageSpeed` 分数与优化建议。
 
-开始前，请导出这个代码库并检查代码。
 
-### 指南
+## 检查站点问题及解决方案
+#### 1.网站index页面卡顿严重
+解决方案：   
+卡顿问题有`html`标签使用不规范以及图片太大导致，所以优化图片大小，压缩图片，并规范化`html`标签。
 
-####Part 1: 优化 index.html 的 PageSpeed Insights 得分
+#### 2.网站pizza页面背景动画有卡顿现象，10帧的平均帧率偏高，滚动帧速会跟随环境变化，
+解决方案：   
+缓存DOM操作并把循环中可以提起的操作提出来，而不是每次循环都提取一遍。   
+用requestAnimationFrame来实现动画，并设置 `60fps` 的帧速
 
-以下是几个帮助你顺利开始本项目的提示：
+```
+// 先缓存dom
+var items = document.querySelectorAll('.mover');
+var scroll_top = document.body.scrollTop / 1250;
 
-1. 将这个代码库导出
-2. 你可以运行一个本地服务器，以便在你的手机上检查这个站点
 
-```bash
-  $> cd /你的工程目录
-  $> python -m SimpleHTTPServer 8080
+// 操作帧的参数，保持 60fps 的帧速
+var fps = 60;
+var now;
+var then = Date.now();
+var interval = 1000/fps;
+var delta;
+var frameId;
+
+function moveLeft(){
+// 使用requestAnimationFrame绘制
+frameId = requestAnimationFrame(moveLeft);
+
+now = Date.now();
+delta = now - then;
+
+if (delta > interval) {
+
+  then = now - (delta % interval);
+
+  for (var i = 0,len = items.length; i < len; i++) {
+    var phase = Math.sin(scroll_top + (i % 5));
+    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+
+    // 子元素都绘制好后，停止requestAnimationFrame
+    if (i == len-1) {
+      cancelAnimationFrame(frameId);
+    }
+    
+  }
+}
+}
+
+moveLeft();
+
 ```
 
-1. 打开浏览器，访问 localhost:8080
-2. 下载 [ngrok](https://ngrok.com/) 并将其安装在你的工程根目录下，让你的本地服务器能够被远程访问。
 
-``` bash
-  $> cd /你的工程目录
-  $> ./ngrok http 8080
+   
+## 启动服务
+
+1.安装`Python`环境
+
+2.启动服务
 ```
+python -m http.server 8000
 
-1. 复制ngrok提供给你的公共URL，然后尝试通过PageSpeed Insights访问它吧！可选阅读：[更多关于整合ngrok、Grunt和PageSpeed的信息](http://www.jamescryer.com/2014/06/12/grunt-pagespeed-and-ngrok-locally-testing/)。
+```
+3.打开浏览器：localhost:8000
 
-接下来，你可以一遍又一遍的进行配置、优化、检测了！祝你好运！
 
-----
 
-####Part 2: 优化 pizza.html 的 FPS（每秒帧数）
 
-你需要编辑 views/js/main.js 来优化 views/pizza.html，直到这个网页的 FPS 达到或超过 60fps。你会在 main.js 中找到一些对此有帮助的注释。
-
-你可以在 Chrome 开发者工具帮助中找到关于 FPS 计数器和 HUD 显示的有用信息。[Chrome 开发者工具帮助](https://developer.chrome.com/devtools/docs/tips-and-tricks).
-
-### 一些关于优化的提示与诀窍
-* [web 性能优化](https://developers.google.com/web/fundamentals/performance/ "web 性能")
-* [分析关键渲染路径](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/analyzing-crp.html "分析关键渲染路径")
-* [优化关键渲染路径](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/optimizing-critical-rendering-path.html "优化关键渲染路径！")
-* [避免 CSS 渲染阻塞](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-blocking-css.html "css渲染阻塞")
-* [优化 JavaScript](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/adding-interactivity-with-javascript.html "javascript")
-* [通过 Navigation Timing 进行检测](https://developers.google.com/web/fundamentals/performance/critical-rendering-path/measure-crp.html "nav timing api")。在前两个课程中我们没有学习 Navigation Timing API，但它对于自动分析页面性能是一个非常有用的工具。我强烈推荐你阅读它。
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/eliminate-downloads.html">下载量越少，性能越好</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/optimize-encoding-and-transfer.html">减少文本的大小</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/image-optimization.html">优化图片</a>
-* <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching.html">HTTP缓存</a>
-
-### 使用 Bootstrap 并定制样式
-这个项目基于 Twitter 旗下的 <a href="http://getbootstrap.com/">Bootstrap框架</a> 制作。所有的定制样式都在项目代码库的 `dist/css/portfolio.css` 中。
-
-* <a href="http://getbootstrap.com/css/">Bootstrap CSS</a>
-* <a href="http://getbootstrap.com/components/">Bootstrap组件</a>
