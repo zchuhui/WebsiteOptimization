@@ -93,5 +93,13 @@ python -m http.server 8000
 3.打开浏览器：localhost:8000
 
 
+## 关于Page Speed 评分
+### index.html页面   
+PC端：
+![image](https://picabstract-preview-ftn.weiyun.com:8443/ftn_pic_abs_v2/5d7743c99775085bdf391a64651be4a2a23fe9db48faf959b2a037378e36164e0ba593bbeafda0fd26b6023cbbbcc128?pictype=scale&from=30113&version=2.0.0.2&uin=943339564&fname=20170520002002.png&size=1024)
 
+移动端：  
+![image](https://picabstract-preview-ftn.weiyun.com:8443/ftn_pic_abs_v2/0e0003a38c42f6d422a2aa18a0ddb8deb107cc317c59611f164706ca014242c28db07619063b5c9d55abaca49605d7eb?pictype=scale&from=30113&version=2.0.0.2&uin=943339564&fname=20170520002244.png&size=1024)
+
+ 
 
